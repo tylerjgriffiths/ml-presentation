@@ -1,15 +1,15 @@
 #!/usr/bin/env python
 
 ## CONFIGURATION
-bradley_file = None
-shape = (1024,1024,)
+bradley_file = "/home/tjg/Development/Data/Bradley/bradleymp.csv"
+shape = (2048)
 
 ## Import Data() class.
 from data import Data
 
 from sklearn.neural_network import MLPRegressor
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import mean_absolute_error, r2_score
+from sklearn.metrics import mean_absolute_error, r2_score, mean_squared_error
 
 import numpy as np
 
@@ -39,9 +39,10 @@ print("X trn:dev:tst={}:{}:{}".format(len(X_train),len(X_dev),len(X_test)))
 print("y trn:dev:tst={}:{}:{}".format(len(y_train),len(y_dev),len(y_test)))
 
 ## Create a new MLPRegressor and fit the data.
-## Good results can be found with shape (300,300,)
+
 print("Fitting data...")
 print("Shape: {}".format(shape))
+
 mlpr_cls = MLPRegressor(hidden_layer_sizes=shape)
 training_start_time = datetime.datetime.now().replace(microsecond=0)
 mlpr_cls.fit(X_train, y_train)
@@ -55,6 +56,9 @@ mlpr_y_pred = mlpr_cls.predict(X_dev)
 ## Calculate and print out some metrics.
 mae = mean_absolute_error(y_dev, mlpr_y_pred)
 print("Mean absolute error: {}".format(mae))
+
+rms = mean_squared_error(y_dev, mlpr_y_pred)
+print("Mean squared error: {}".format(rms))
 
 rsq = r2_score(y_dev, mlpr_y_pred)
 print("R2 score: {}".format(rsq))
